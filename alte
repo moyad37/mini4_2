@@ -1,0 +1,84 @@
+# NAME = 			minishell
+
+# SRCS_PATH =		./src
+# #OBJS_PATH =		./objs
+# LIBFT_PATH =	./src/libft
+
+# FILES =			minishell \
+# 				src/init \
+# 				src/builtins/cd \
+# 				src/builtins/echo \
+# 				src/builtins/env \
+# 				src/builtins/exit \
+# 				src/builtins/export \
+# 				src/builtins/pwd \
+# 				src/builtins/unset \
+# 				src/envp/creat_envp \
+# 				src/envp/list_of_envp \
+# 				src/lets_start/redirects/red_delete \
+# 				src/lets_start/redirects/red_init \
+# 				src/lets_start/check_start \
+# 				src/lets_start/exec \
+# 				src/lets_start/exe_init \
+# 				src/lets_start/exe_utils \
+# 				src/lets_start/lexer src/lets_start/parser \
+# 				src/lets_start/lex_init src/lets_start/lex_utils \
+# 				src/sig_handler/handler \
+# 				src/sig_handler/handle_exe \
+# 				src/utils/check_utils/check_command \
+# 				src/utils/check_utils/check \
+# 				src/utils/errors/check_error \
+# 				src/utils/errors/error_print \
+# 				src/utils/errors/get_error \
+# 				src/utils/zitat/rm_ziztat \
+# 				src/utils/args_utils \
+# 				src/utils/clear_tokens \
+# 				src/utils/die \
+# 				src/utils/dup \
+# 				src/utils/endProChild \
+# 				src/utils/free \
+# 				src/utils/get_matrix \
+# 				src/utils/handleBuiltins \
+# 				src/utils/heredoc \
+# 				src/utils/key \
+# 				src/utils/replace \
+# 				src/utils/swaping \
+# 				src/utils/tokens \
+# 				src/utils/update \
+# 				src/utils/vars 
+
+# SRCS =			$(addprefix $(SRCS_PATH)/, $(addsuffix .c, $(FILES)))
+# #OBJS =			$(addprefix $(OBJS_PATH)/, $(addsuffix .o, $(FILES)))
+
+# LIBFT_FLAGS =	-L $(LIBFT_PATH) -lft
+# CFLAGS = 		-Wall -Wextra -Werror -g3
+
+# all: libft $(NAME)
+
+# libft:
+# 	@make -C $(LIBFT_PATH) --no-print-directory
+
+# $(NAME): $(OBJS) $(LIBFT_PATH)/libft.a
+# 	cc $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT_FLAGS) -lreadline
+
+# #$(OBJS_PATH)/%.o: $(SRCS_PATH)/%.c | $(OBJS_PATH)
+# #	@mkdir -p $(@D)
+# #	cc $(CFLAGS) -I ./includes -c $< -o $@
+
+# #$(OBJS_PATH):
+# #	mkdir -p $(OBJS_PATH)
+
+# $(LIBFT_PATH)/libft.a:
+# 	make -C $(LIBFT_PATH) --no-print-directory
+
+# clean:
+# 	rm -rf $(OBJS_PATH)
+# 	make -C $(LIBFT_PATH) clean --no-print-directory
+
+# fclean: clean
+# 	rm -f $(NAME)
+# 	make -C $(LIBFT_PATH) fclean --no-print-directory
+
+# re: fclean all
+
+# .PHONY: all clean fclean re
