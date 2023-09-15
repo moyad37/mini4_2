@@ -6,7 +6,7 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 15:27:57 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/09/15 13:48:48 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,13 @@
 # define DIR_FILE 0
 # define REG_FILE 1
 
+
+# define ENOENT 2
+# define EACCES 13
+# define ENAMETOOLONG 36
+# define EISDIR 126
+# define ENOCMD 127
+
 # include <term.h>
 # include <stdio.h>
 # include <fcntl.h>
@@ -38,7 +45,7 @@
 # include <sys/types.h>
 # include <readline/history.h>
 # include <readline/readline.h>
-# include "errors.h"
+
 # include "../src/libft/libft.h"
 
 
@@ -161,6 +168,8 @@ char	**pipeline_validation(char *cmd);
 
 //utils/die
 void	die(void);
+//utils
+char	**seperatByC(const char *str, char c);
 
 //utils/zitat/rm_ziztat
 void	remove_filename_quotes(void);

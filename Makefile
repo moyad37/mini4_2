@@ -45,6 +45,7 @@ SRCS        = 	minishell.c \
 				src/utils/heredoc.c \
 				src/utils/key.c \
 				src/utils/replace.c \
+				src/utils/seperat.c \
 				src/utils/swaping.c \
 				src/utils/tokens.c \
 				src/utils/update.c \

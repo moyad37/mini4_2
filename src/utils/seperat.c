@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split_old.c                                     :+:      :+:    :+:   */
+/*   seperat.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 15:23:59 by mmanssou         ###   ########.fr       */
+/*   Created: 2023/09/15 13:56:05 by mmanssou          #+#    #+#             */
+/*   Updated: 2023/09/15 13:56:37 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../includes/minishell.h"
 
-static int	count_words(const char *s, char c)
+static int	WordsCount(const char *s, char c)
 {
 	size_t	words;
 
@@ -29,7 +29,7 @@ static int	count_words(const char *s, char c)
 	return (words);
 }
 
-char	**ft_split_old(const char *str, char c)
+char	**seperatByC(const char *str, char c)
 {
 	int		i;
 	char	**lst;
@@ -38,7 +38,7 @@ char	**ft_split_old(const char *str, char c)
 	i = 0;
 	if (!str)
 		return (0);
-	lst = (char **)ft_calloc(sizeof(char *), count_words(str, c) + 1);
+	lst = (char **)ft_calloc(sizeof(char *), WordsCount(str, c) + 1);
 	if (!lst)
 		return (0);
 	while (*str)

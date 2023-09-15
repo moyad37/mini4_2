@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exe_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 14:14:07 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/09/15 13:47:49 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static char	**get_path_dirs(void)
 
 	i = 0;
 	path = get_key_value(g_minishell.envp_list, "PATH");
-	path_dirs = ft_split_old(path, ':');
+	path_dirs = seperatByC(path, ':');
 	while (path_dirs[i])
 	{
 		append(&path_dirs[i], ft_strdup("/"));

@@ -3,120 +3,107 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 15:23:59 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/09/15 13:58:03 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	check_line_break(char *s)
-{
-	int	i;
+char	*read_save_modifid_and_send(int fd, char *temp);
+char	*rm_line(char *temp);
 
-	if (!s)
-		return (0);
-	i = -1;
-	while (s[++i])
-		if (s[i] == '\n')
-			return (1);
-	return (0);
-}
-
-static char	*extract_new_line(char *rest)
-{
-	char	*new_line;
-	int		i;
-
-	i = 0;
-	while (rest[i] && rest[i] != '\n')
-		i++;
-	if (rest[i] == '\n')
-		i++;
-	new_line = (char *)malloc(sizeof(char) * (i + 1));
-	if (!new_line)
-		return (0);
-	i = -1;
-	while (rest[++i] && rest[i] != '\n')
-		new_line[i] = rest[i];
-	if (rest[i] == '\n')
-	{
-		new_line[i] = rest[i];
-		i++;
-	}
-	new_line[i] = '\0';
-	return (new_line);
-}
-
-static char	*extract_new_rest(char *rest)
-{
-	char	*new_rest;
-	int		i;
-	int		j;
-
-	i = 0;
-	while (rest[i] && rest[i] != '\n')
-		i++;
-	if ((rest[i] == '\n' && rest[i + 1] == '\0') || !rest[i])
-	{
-		free(rest);
-		return (NULL);
-	}
-	new_rest = (char *)malloc(sizeof(char) * (ft_strlen(rest) - i + 1));
-	if (!new_rest)
-		return (0);
-	j = 0;
-	while (rest[++i] != '\0')
-		new_rest[j++] = rest[i];
-	new_rest[j] = '\0';
-	free(rest);
-	return (new_rest);
-}
-
-static char	*fd_read(int fd, char *rest)
-{
-	char	*buf;
-	ssize_t	bytes_read;
-
-	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!buf)
-		return (0);
-	bytes_read = 1;
-	while (!(check_line_break(rest)))
-	{
-		bytes_read = read(fd, buf, BUFFER_SIZE);
-		if (bytes_read <= 0)
-			break ;
-		buf[bytes_read] = '\0';
-		rest = ft_strjoin_gnl(rest, buf);
-		if (!rest)
-		{
-			free(buf);
-			return (NULL);
-		}
-	}
-	free(buf);
-	if (bytes_read == -1)
-		return (NULL);
-	return (rest);
-}
 
 char	*get_next_line(int fd)
 {
-	static char	*rest[1024];
+	static char	*temp;
 	char		*line;
 
-	if (fd < 0 || fd > 1024 || BUFFER_SIZE <= 0)
-		return (0);
-	rest[fd] = fd_read(fd, rest[fd]);
-	if (!(ft_strlen(rest[fd])))
+	line = NULL;
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	temp = read_save_modifid_and_send(fd, temp);
+	if (!temp)
+		return (NULL);
+	line = send_line_gnl(temp);
+	temp = rm_line(temp);
+	return (line);
+}
+
+char	*rm_line(char *temp)
+{
+	char	*new_temp;
+	int		hin;
+	int		i;
+
+	i = 0;
+	hin = 0;
+	hin = hin_bis_cut_gnl(temp);
+	if (!temp[hin])
 	{
-		free(rest[fd]);
+		free(temp);
 		return (NULL);
 	}
-	line = extract_new_line(rest[fd]);
-	rest[fd] = extract_new_rest(rest[fd]);
-	return (line);
+	hin++;
+	new_temp = malloc_and_check((ft_strlen_gnl(temp + hin) + 1), sizeof(char));
+	while (temp[hin] != '\0')
+	{
+		new_temp[i] = temp[hin];
+		i++;
+		hin++;
+	}
+	new_temp[i] = 0;
+	free(temp);
+	return (new_temp);
+}
+
+void	ft_bzero_gnl(void *s, size_t n)
+{
+	char	*str;
+	size_t	i;
+
+	str = (char *)s;
+	i = 0;
+	while (i < n)
+	{
+		str[i] = '\0';
+		i++;
+	}
+}
+
+char	*malloc_and_check(size_t count, size_t size)
+{
+	char	*result;
+
+	result = malloc(count * size);
+	if (!result)
+		return (NULL);
+	ft_bzero_gnl(result, (size * count));
+	return (result);
+}
+
+char	*read_save_modifid_and_send(int fd, char *temp)
+{
+	int		read_check;
+	char	*buff;
+
+	buff = malloc_and_check((BUFFER_SIZE + 1), 1);
+	read_check = 1;
+	while (read_check > 0)
+	{
+		read_check = read(fd, buff, BUFFER_SIZE);
+		if (read_check == -1)
+		{
+			free(buff);
+			return (NULL);
+		}
+		buff[read_check] = '\0';
+		temp = ft_strjoin_gnl(temp, buff);
+		if (ft_strchr_gnl(buff, '\n'))
+			break ;
+	}
+	free(buff);
+	return (temp);
 }
