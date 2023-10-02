@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 15:23:59 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/02 15:15:45 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int	exec_unset(char *delet_var)
 {
 	if (!is_valid_identifier(delet_var))
 	{
-		ft_printf(2, "bash: unset: `%s': not a valid identifier\n", delet_var);
+		p_fd(2, "bash: unset: `%s': not a valid identifier\n", delet_var);
 		return (1);
 	}
 	if (key_exists(g_minishell.envp_list, delet_var))

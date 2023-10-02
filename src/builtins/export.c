@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 15:23:59 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/02 15:15:41 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ static void	print_export(t_command cmd)
 		key = tmp->key;
 		value = tmp->value;
 		if (key && value)
-			ft_printf(out, "declare -x %s=\"%s\"\n", key, value);
+			p_fd(out, "declare -x %s=\"%s\"\n", key, value);
 		else
-			ft_printf(out, "declare -x %s\n", key);
+			p_fd(out, "declare -x %s\n", key);
 		tmp = tmp->next;
 	}
 }
@@ -96,7 +96,7 @@ int	ft_export(t_command cmd)
 	{
 		if (!is_valid_identifier(cmd.args[i]))
 		{
-			ft_printf(STDERR_FILENO, \
+			p_fd(STDERR_FILENO, \
 				"bash: export: `%s': not a valid identifier\n", cmd.args[i]);
 			status = 1;
 		}

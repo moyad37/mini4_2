@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 15:23:59 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/02 15:15:43 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	ft_pwd(t_command cmd)
 	handle_output(cmd, &out);
 	cwd = getcwd(NULL, 0);
 	if (cmd.args[0])
-		ft_printf(out, "%s\n", cwd);
+		p_fd(out, "%s\n", cwd);
 	ft_free(cwd);
 	if (g_minishell.on_fork)
 		die_child(0, 0);

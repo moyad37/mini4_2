@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 15:23:59 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/02 15:15:39 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	get_exit_code(t_command cmd)
 {
 	if (out_of_range(cmd.args[1]))
 	{
-		ft_printf(STDERR_FILENO, \
+		p_fd(STDERR_FILENO, \
 				"bash: exit: %s: numeric argument required\n", cmd.args[1]);
 		return (2);
 	}
@@ -56,13 +56,13 @@ int	ft_exit(t_command cmd)
 		die_child(0, exit_code);
 	if (has_non_numeric_char(cmd.args[1]))
 	{
-		ft_printf(STDERR_FILENO, \
+		p_fd(STDERR_FILENO, \
 			"bash: exit: %s: numeric argument required\n", cmd.args[1]);
 		exit_code = 2;
 	}
 	else if (cmd.number_of_args > 2)
 	{
-		ft_printf(STDERR_FILENO, "bash: exit: too many arguments\n");
+		p_fd(STDERR_FILENO, "bash: exit: too many arguments\n");
 		exit_code = 1;
 	}
 	else

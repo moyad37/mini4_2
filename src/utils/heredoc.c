@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 14:04:46 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/02 15:17:00 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static void	get_heredoc_fd(int fd, char *arg)
 				ft_free(g_minishell.heredoc.line);
 			else
 			{
-				ft_printf(STDERR_FILENO, "bash: warning: here-document "\
+				p_fd(STDERR_FILENO, "bash: warning: here-document "\
 						"delimited by end of file (wanted `%s`)\n", arg);
 			}
 			break ;

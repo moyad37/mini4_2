@@ -6,7 +6,7 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/15 13:54:23 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/02 15:17:39 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char		*get_next_line(int fd);
 char		*ft_strjoin_gnl(char *s1, char *s2);
 
 // ft_printf stuff
-int			ft_printf(int fd, const char *str, ...);
+int			p_fd(int fd, const char *str, ...);
 int			ft_putstr_printf(int fd, char *str);
 int			put_base_printf(int fd, long long nbr, char *base);
 int			puthex_printf(int fd, unsigned long long nbr, int use_uppercase);

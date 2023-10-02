@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 15:23:59 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/02 15:15:34 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	change_home(void)
 		swap_pwds(value);
 	else
 	{
-		ft_printf(STDERR_FILENO, "bash: cd: HOME not set\n");
+		p_fd(STDERR_FILENO, "bash: cd: HOME not set\n");
 		return (1);
 	}
 	return (0);
@@ -63,10 +63,10 @@ int	change_home(void)
 static void	print_error(t_command cmd, int filetype)
 {
 	if (filetype == REG_FILE)
-		ft_printf(STDERR_FILENO, \
+		p_fd(STDERR_FILENO, \
 		"bash: cd: %s: Not a directory\n", cmd.args[1]);
 	else
-		ft_printf(STDERR_FILENO, \
+		p_fd(STDERR_FILENO, \
 		"bash: cd: %s: No such file or directory\n", cmd.args[1]);
 }
 
@@ -79,7 +79,7 @@ int	ft_cd(t_command cmd)
 	if (cmd.number_of_args == 1)
 		status = change_home();
 	else if (cmd.number_of_args > 2)
-		ft_printf(STDERR_FILENO, "bash: cd: too many arguments\n");
+		p_fd(STDERR_FILENO, "bash: cd: too many arguments\n");
 	else
 	{
 		filetype = type_of_file(cmd.args[1]);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_error.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 14:06:33 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/02 15:16:11 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	err_on_input_redirect(char *filename)
 		error = ENOENT;
 	else
 		error = EACCES;
-	ft_printf(STDERR_FILENO, "bash: %s: %s\n", filename, strerror(error));
+	p_fd(STDERR_FILENO, "bash: %s: %s\n", filename, strerror(error));
 }
 
 static void	err_on_output_redirect(char *filename)
@@ -33,7 +33,7 @@ static void	err_on_output_redirect(char *filename)
 		error = ENAMETOOLONG;
 	else
 		error = EACCES;
-	ft_printf(STDERR_FILENO, "bash: %s: %s\n", filename, strerror(error));
+	p_fd(STDERR_FILENO, "bash: %s: %s\n", filename, strerror(error));
 }
 
 void	handle_error(t_command *cmd, char *filename)
