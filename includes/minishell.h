@@ -6,7 +6,7 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/15 13:48:48 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/18 22:18:47 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,8 @@ char	*get_key_value(t_node *envp_list, char *key);
 void	change_value_from_key(t_node **envp_list, char *key, char *new_data);
 int		key_exists(t_node *envp_list, char *key);
 
-t_node	*get_envp_list(char **envp);
-char	**get_matrix_with_key_value(char *env_variable);
+t_node	*ev_list_get(char **envp);
+char	**split_envp(char *env_variable);
 char	**get_envp(void);
 
 // Builtins
@@ -148,7 +148,7 @@ int		is_valid_var(char *str);
 void	swap_stream_fd(char *stream, t_command *command, int new_fd);
 void	close_fds(void);
 void	close_fds_in_child(void);
-void	handler(int signal);
+void	handl_sig(int signal);
 void	ft_free_commands(void);
 void	ft_free(void *ptr);
 void	die_child(int heredoc, int exit_code);
@@ -161,7 +161,7 @@ void	print_curr_err(t_command cmd);
 void	ft_print_matrix_fd(char **matrix, int fd);
 
 //init
-void	init_minishell(char **envp);
+int	init(char **envp);
 
 //lets_start
 char	**pipeline_validation(char *cmd);
@@ -173,5 +173,13 @@ char	**seperatByC(const char *str, char c);
 
 //utils/zitat/rm_ziztat
 void	remove_filename_quotes(void);
+
+
+
+
+
+
+void printCommand(t_command cmd);
+
 
 #endif

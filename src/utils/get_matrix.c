@@ -3,16 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   get_matrix.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 15:23:59 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/18 21:40:56 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	**get_matrix_with_key_value(char *env_variable)
+/*
+Die Funktion split_envp erstellt ein Schlüssel-Wert-Paar aus einer Umgebungsvariablen.
+Sie findet das Gleichheitszeichen in der Umgebungsvariablen, trennt den Schlüssel vom Wert und gibt 
+diese Informationen als ein Zeiger-Array zurück. Dies ist nützlich, um Umgebungsvariablen in einer Shell zu verarbeiten.
+*/
+char	**split_envp(char *env_variable)
 {
 	long int	adresses_diff;
 	char		**key_and_value;
@@ -27,6 +32,10 @@ char	**get_matrix_with_key_value(char *env_variable)
 		key_and_value[1] = ft_strdup(++equal_occurence);
 	else
 		key_and_value[1] = NULL;
+	
+
+	
+	//printf("key_and_value[0] = %s\n\n key_and_value[1] = %s\n\n ",key_and_value[0], key_and_value[1]);
 	return (key_and_value);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/02 15:15:41 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/18 21:27:55 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static void	exec_export(char *new_var)
 		ft_lstadd_back(&g_minishell.envp_list, new_node);
 		return ;
 	}
-	key_and_value = get_matrix_with_key_value(new_var);
+	key_and_value = split_envp(new_var);
 	key = key_and_value[0];
 	value = key_and_value[1];
 	if (!key_exists(g_minishell.envp_list, key))

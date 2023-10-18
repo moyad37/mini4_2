@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 15:23:59 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/18 22:27:10 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,34 @@ static void	print_args(int size, char **args, int out_fd)
 		ft_putstr_fd(args[i], out_fd);
 }
 
+void printCommand(t_command cmd)
+{
+    printf("pipe: [%d, %d]\n", cmd.pipe[0], cmd.pipe[1]);
+    printf("number_of_args: %d\n", cmd.number_of_args);
+    printf("input_fd: %d\n", cmd.input_fd);
+    printf("output_fd: %d\n", cmd.output_fd);
+    printf("error: %d\n", cmd.error);
+    printf("bin_path: %s\n", cmd.bin_path);
+    printf("args:\n");
+    for (int i = 0; i < cmd.number_of_args; i++)
+	{
+        printf("  args[%d]: %s\n", i, cmd.args[i]);
+    }
+}
+
+
+/*
+Die ft_echo-Funktion behandelt den echo-Befehl in einer Shell. Sie überprüft die Argumente,
+gibt Text aus und berücksichtigt den -n-Schalter. Je nach Situation gibt sie einen Zeilenumbruch
+aus und kümmert sich um die Ein- und Ausgabeverwaltung in einem Kindprozess oder in der Haupt-Shell.
+*/
 int	ft_echo(t_command cmd)
 {
 	int	comparison;
 	int	out;
 
 	out = 1;
+	//printCommand(cmd);
 	handle_output(cmd, &out);
 	comparison = 1;
 	if (g_minishell.on_fork && (cmd.input_fd == -1 || cmd.output_fd == -1))
