@@ -6,13 +6,13 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/17 22:32:25 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/20 15:40:37 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int	has_non_numeric_char(char *first_arg)
+static int	check_nur_num(char *first_arg)
 {
 	while (first_arg && *first_arg)
 	{
@@ -23,7 +23,7 @@ static int	has_non_numeric_char(char *first_arg)
 	return (0);
 }
 
-static int	out_of_range(char *nptr)
+static int	mehr_als_valid(char *nptr)
 {
 	int			nptr_len;
 	long int	nbr;
@@ -35,9 +35,9 @@ static int	out_of_range(char *nptr)
 	return (0);
 }
 
-static int	get_exit_code(t_command cmd)
+static int	else_exit_code_num(t_command cmd)
 {
-	if (out_of_range(cmd.args[1]))
+	if (mehr_als_valid(cmd.args[1]))
 	{
 		p_fd(STDERR_FILENO, \
 				"bash: exit: %s: numeric argument required\n", cmd.args[1]);
@@ -53,8 +53,8 @@ int	ft_exit(t_command cmd)
 
 	exit_code = 0;
 	if (cmd.args[1] == NULL)
-		die_child(0, exit_code);
-	if (has_non_numeric_char(cmd.args[1]))
+		end_pro_child(0, exit_code);
+	if (check_nur_num(cmd.args[1]))
 	{
 		p_fd(STDERR_FILENO, \
 			"bash: exit: %s: numeric argument required\n", cmd.args[1]);
@@ -66,8 +66,8 @@ int	ft_exit(t_command cmd)
 		exit_code = 1;
 	}
 	else
-		exit_code = get_exit_code(cmd);
+		exit_code = else_exit_code_num(cmd);
 	ft_putstr_fd("exit\n", STDIN_FILENO);
-	die_child(0, exit_code);
+	end_pro_child(0, exit_code);
 	return (0);
 }

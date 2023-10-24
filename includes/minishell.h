@@ -6,7 +6,7 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/18 22:18:47 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/24 13:54:12 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,11 +83,11 @@ extern t_minishell	g_minishell;
 
 char	*get_key_value(t_node *envp_list, char *key);
 void	change_value_from_key(t_node **envp_list, char *key, char *new_data);
-int		key_exists(t_node *envp_list, char *key);
+int		key_ist_da(t_node *envp_list, char *key);
 
 t_node	*ev_list_get(char **envp);
 char	**split_envp(char *env_variable);
-char	**get_envp(void);
+char	**creat_valid_envp(void);
 
 // Builtins
 void	run_builtin(t_command cmd, int (*builtin)(t_command cmd));
@@ -99,16 +99,16 @@ int		ft_export(t_command cmd);
 int		ft_unset(t_command cmd);
 int		ft_env(t_command cmd);
 int		ft_exit(t_command cmd);
-void	handle_input(t_command cmd, int *fd);
-void	handle_output(t_command cmd, int *fd);
+//void	check_input_with_pipe(t_command cmd, int *fd);
+void	check_output_with_pipe(t_command cmd, int *fd);
 
 // Lexer
 char	**lexer(char *cmd);
-int		put_spaces(char *str, int pos);
-int		space_duplicate_metachars(char *str, int pos);
-char	*human_readable_cmd(char *cmd);
+int		lesezeichen_in_pos(char *str, int pos);
+int		format_foppelt_pipe_leerzeichen(char *str, int pos);
+char	*format_cmd(char *cmd, int i);
 void	replace_between(char *str, char *set1, char *set2);
-char	*init_human_readable_cmd(char *cmd);
+char	*init_for_cmd(char *cmd);
 
 // Parser
 int		parser(char ***tokens);
@@ -135,8 +135,8 @@ int		has_error(t_command *cmd);
 void	handle_error(t_command *cmd, char *filename);
 
 // Utils
-int		is_quote(char c);
-int		is_meta_char(char c);
+int		check_zitat(char c);
+int		check_pipe(char c);
 int		is_bash_word(char *str);
 int		is_bash_char(char c);
 int		is_redirect(char *str);
@@ -151,7 +151,7 @@ void	close_fds_in_child(void);
 void	handl_sig(int signal);
 void	ft_free_commands(void);
 void	ft_free(void *ptr);
-void	die_child(int heredoc, int exit_code);
+void	end_pro_child(int heredoc, int exit_code);
 int		test_filename(char *filename, char *redirect);
 void	update_env(void);
 int		count_args(char **tokens);
@@ -164,10 +164,10 @@ void	ft_print_matrix_fd(char **matrix, int fd);
 int	init(char **envp);
 
 //lets_start
-char	**pipeline_validation(char *cmd);
+char	**check_commands(char *cmd);
 
-//utils/die
-void	die(void);
+//utils/ft_destroy
+void	ft_destroy(void);
 //utils
 char	**seperatByC(const char *str, char c);
 
@@ -181,5 +181,7 @@ void	remove_filename_quotes(void);
 
 void printCommand(t_command cmd);
 
+
+void	wait_sig(void);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/18 21:01:29 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/20 14:33:57 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,10 @@ void	handl_sig(int signal)
 	}
 	else if (signal == SIGINT && g_minishell.on_fork == 1)
 		write(STDOUT_FILENO, "\n", 1);
+}
+
+void	wait_sig(void)
+{
+	signal(SIGINT, handl_sig);
+	signal(SIGQUIT, SIG_IGN);
 }

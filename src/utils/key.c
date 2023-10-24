@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 15:23:59 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/20 20:42:10 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	append(char **s1, char *s2)
 	*s1 = new_str;
 }
 
-int	key_exists(t_node *envp_list, char *key)
+int	key_ist_da(t_node *envp_list, char *key)
 {
 	char	*curr_key;
 	int		comparison;
@@ -58,7 +58,7 @@ char	*get_key_value(t_node *envp_list, char *key)
 {
 	if (key[0] == '?')
 		return (ft_itoa(g_minishell.status_code));
-	if (!key_exists(envp_list, key))
+	if (!key_ist_da(envp_list, key))
 		return ("");
 	while (ft_strcmp(envp_list->key, key) != 0)
 		envp_list = envp_list->next;

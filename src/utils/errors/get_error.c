@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_error.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 14:06:31 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/24 13:35:10 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ static int	has_unclosed_quote(char *token)
 	quote = 0;
 	while (token[i])
 	{
-		if (is_quote(token[i]) && quote == 0)
+		if (check_zitat(token[i]) && quote == 0)
 			quote = token[i];
-		else if (is_quote(token[i]) && token[i] == quote)
+		else if (check_zitat(token[i]) && token[i] == quote)
 			quote = 0;
 		i++;
 	}

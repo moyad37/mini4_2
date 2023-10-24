@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 14:23:48 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/20 15:15:24 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,16 @@ static int	run_single_cmd(t_command cmd)
 	{
 		signal(SIGQUIT, SIG_DFL);
 		if (cmd.input_fd == -1 || cmd.output_fd == -1)
-			die_child(0, 1);
+			end_pro_child(0, 1);
 		if (cmd.error && get_builtin_pos(cmd.args[0]) == -1)
-			die_child(0, cmd.error);
+			end_pro_child(0, cmd.error);
 		if (cmd.bin_path && cmd.args[0])
 		{
 			make_dups(cmd);
 			close_fds_in_child();
 			execve(cmd.bin_path, cmd.args, g_minishell.envp);
 		}
-		die_child(0, cmd.error);
+		end_pro_child(0, cmd.error);
 	}
 	return (pid);
 }

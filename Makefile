@@ -36,7 +36,7 @@ SRCS        = 	minishell.c \
 				src/utils/zitat/rm_ziztat.c \
 				src/utils/args_utils.c \
 				src/utils/clear_tokens.c \
-				src/utils/die.c \
+				src/utils/destroy.c \
 				src/utils/dup.c \
 				src/utils/endProChild.c \
 				src/utils/free.c \

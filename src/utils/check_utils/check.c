@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 15:23:59 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/24 13:51:25 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	is_bash_char(char c)
 	return (1);
 }
 
-int	is_meta_char(char c)
+int	check_pipe(char c)
 {
 	if (ft_strchr(">|<", c))
 		return (1);
@@ -37,7 +37,7 @@ int	is_dir(const char *path)
 	return (S_ISDIR(file_stat.st_mode));
 }
 
-int	is_quote(char c)
+int	check_zitat(char c)
 {
 	if (c == SINGLE_QUOTE || c == DOUBLE_QUOTE)
 		return (1);

@@ -6,13 +6,13 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/02 15:15:45 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/20 21:05:13 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int	is_valid_identifier(char *var)
+static int	check_valid_unset(char *var)
 {
 	int	i;
 
@@ -22,14 +22,14 @@ static int	is_valid_identifier(char *var)
 	i++;
 	while (var[i] && var[i] != '=')
 	{
-		if (!is_bash_char(var[i]))
+		if (!ft_isalpha(var[i]) && !ft_isdigit(var[i]) && var[i] != '_')
 			return (0);
 		i++;
 	}
 	return (1);
 }
 
-void	delet_specific_node(t_node **envp_list, char *key)
+void	remove_key_after_check(t_node **envp_list, char *key)
 {
 	t_node	*curr;
 	t_node	*prev;
@@ -53,16 +53,16 @@ void	delet_specific_node(t_node **envp_list, char *key)
 	ft_lstdelone(curr, &free);
 }
 
-static int	exec_unset(char *delet_var)
+static int	next_step_unset(char *delet_var)
 {
-	if (!is_valid_identifier(delet_var))
+	if (!check_valid_unset(delet_var))
 	{
 		p_fd(2, "bash: unset: `%s': not a valid identifier\n", delet_var);
 		return (1);
 	}
-	if (key_exists(g_minishell.envp_list, delet_var))
+	if (key_ist_da(g_minishell.envp_list, delet_var))
 	{
-		delet_specific_node(&g_minishell.envp_list, delet_var);
+		remove_key_after_check(&g_minishell.envp_list, delet_var);
 		update_env();
 	}
 	return (0);
@@ -79,12 +79,12 @@ int	ft_unset(t_command cmd)
 	{
 		while (cmd.args[i])
 		{
-			if (exec_unset(cmd.args[i]))
+			if (next_step_unset(cmd.args[i]))
 				status = 1;
 			i++;
 		}
 	}
 	if (g_minishell.on_fork)
-		die_child(0, status);
+		end_pro_child(0, status);
 	return (status);
 }

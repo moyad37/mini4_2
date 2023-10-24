@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 13:38:44 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/24 14:14:12 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	print_invalid_syntax(int idx_err, char **tokens)
 		err_token = ft_strdup("newline");
 	else
 		err_token = ft_strdup(tokens[idx_err + 1]);
-	printf("bash: syntax error near unexpected token `%s'\n", err_token);
+	p_fd(2, "bash: syntax error near unexpected token `%s'\n", err_token);
 	g_minishell.status_code = 2;
 	free(err_token);
 	return (1);

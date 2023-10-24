@@ -6,7 +6,7 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/02 15:17:00 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/20 15:14:53 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	handler_heredoc(int signal)
 	if (signal == SIGINT)
 	{
 		write(STDOUT_FILENO, "\n", 1);
-		die_child(1, 130);
+		end_pro_child(1, 130);
 	}
 }
 
@@ -72,7 +72,7 @@ static void	get_heredoc_fd(int fd, char *arg)
 		ft_free(g_minishell.heredoc.line);
 	}
 	close(fd);
-	die_child(1, 0);
+	end_pro_child(1, 0);
 }
 
 int	heredoc(t_command *cmd, char *arg)

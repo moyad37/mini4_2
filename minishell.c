@@ -6,7 +6,7 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/18 21:14:41 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/24 14:11:56 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,14 @@
 #include "./src/libft/libft.h"
 
 t_minishell	g_minishell;
+
+char	*first_read(char *cmd)
+{
+	cmd = readline("$ ");
+	if(!cmd)
+		return (NULL);
+	return (cmd);
+}
 
 static void	print_possible_errors(void)
 {
@@ -46,29 +54,36 @@ int check_arg(int ac, char **av, char **envp)
 int	main(int ac, char **av, char **envp)
 {
 	char	*cmd;
-	char	**tokens;
+	char	**command_list;
 
 	// if (ac != 1 && !av)
 	// 	return (0);
+	cmd = NULL;
 	if (!check_arg(ac, av, envp))
 	{
 		p_fd(2, "arg error, make sure you have like so : './minishell' \n");
 		return (0);
 	}
-	signal(SIGINT, handl_sig);
-	signal(SIGQUIT, SIG_IGN);
+	wait_sig();
+	// signal(SIGINT, handl_sig);
+	// signal(SIGQUIT, SIG_IGN);
 	if(init(envp) != 11)
 		return (0);
 	while (1)
 	{
-		cmd = readline("$ ");
-		tokens = pipeline_validation(cmd);
-		if (tokens)
+		cmd = first_read(cmd);
+		if(cmd == NULL)
+			ft_destroy();
+		//cmd = readline("$ ");
+		command_list = check_commands(cmd);
+		if(command_list == NULL)
+			ft_destroy();
+		if (command_list)
 		{
-			executor(tokens);
+			executor(command_list);
 			print_possible_errors();
 			ft_free_commands();
 		}
-	}
+	} 
 	return (0);
 }

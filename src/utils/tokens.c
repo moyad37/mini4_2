@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 13:38:10 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/24 13:35:05 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ char	**get_subtokens(char *token, int idx)
 	if (*token == '\0')
 		return (ft_calloc(idx + 1, sizeof(char *)));
 	quoted = 0;
-	if (is_quote(token[i]))
+	if (check_zitat(token[i]))
 		quoted = token[i++];
-	while (token[i] && ((quoted && quoted != token[i]) || !is_quote(token[i])))
+	while (token[i] && ((quoted && quoted != token[i]) || !check_zitat(token[i])))
 		i++;
-	if (quoted && is_quote(token[i]))
+	if (quoted && check_zitat(token[i]))
 		i++;
 	subtokens = get_subtokens(token + i, idx + 1);
 	subtokens[idx] = ft_substr(token, 0, i);

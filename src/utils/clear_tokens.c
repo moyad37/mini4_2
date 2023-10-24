@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clear_tokens.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 13:54:40 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/24 13:35:01 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ void	clear_subtokens(char **subtokens)
 	i = 0;
 	while (subtokens[i])
 	{
-		if (is_quote(*subtokens[i]) && is_empty_quote(subtokens[i]))
+		if (check_zitat(*subtokens[i]) && is_empty_quote(subtokens[i]))
 			ft_memset(subtokens[i], 0, 2);
-		else if (is_quote(*subtokens[i]))
+		else if (check_zitat(*subtokens[i]))
 			erase_external_quotes(subtokens[i]);
 		i++;
 	}

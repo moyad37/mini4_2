@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   check_start.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 15:23:59 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/24 14:06:22 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	space_duplicate_metachars(char *str, int pos)
+int	format_foppelt_pipe_leerzeichen(char *str, int pos)
 {
 	int	i;
 
@@ -38,20 +38,21 @@ int	space_duplicate_metachars(char *str, int pos)
 	return (i);
 }
 
-
-char	**pipeline_validation(char *cmd)
+char	**check_commands(char *cmd)
 {
 	char	**tokens;
 
 	tokens = NULL;
 	if (cmd == NULL)
-		die();
+		ft_destroy();
 	if (cmd[0] == '\0')
 		ft_free(cmd);
 	else
 	{
 		add_history(cmd);
 		tokens = lexer(cmd);
+		if(*tokens == NULL)
+			return (NULL);
 		ft_free(cmd);
 		if (parser(&tokens) == 1 || *tokens == NULL)
 		{

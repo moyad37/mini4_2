@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   endProChild.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 15:23:59 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/20 15:14:18 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	close_fds_in_child(void)
 	}
 }
 
-void	die_child(int heredoc, int exit_code)
+void	end_pro_child(int heredoc, int exit_code)
 {
 	if (heredoc)
 		close(g_minishell.heredoc.fd);

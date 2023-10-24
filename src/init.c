@@ -6,7 +6,7 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/18 21:19:33 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/20 14:37:40 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	init(char **envp)
 	i++;
 	g_minishell.envp_list = ev_list_get(envp);
 	i++;
-	g_minishell.envp = get_envp();
+	g_minishell.envp = creat_valid_envp();
 	i++;
 	g_minishell.builtins[0] = ft_echo;
 	i++;

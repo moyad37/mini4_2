@@ -6,13 +6,13 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/18 21:27:55 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/20 20:48:33 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int	is_valid_identifier(char *var)
+static int	check_valid_export(char *var)
 {
 	int	i;
 
@@ -22,45 +22,51 @@ static int	is_valid_identifier(char *var)
 	i++;
 	while (var[i] && var[i] != '=')
 	{
-		if (!is_bash_char(var[i]))
+		if (!ft_isalpha(var[i]) && !ft_isdigit(var[i]) && var[i] != '_')
 			return (0);
 		i++;
 	}
 	return (1);
 }
 
-static void	print_export(t_command cmd)
+static void	valid_export_print(t_command cmd)
 {
-	char	*key;
-	char	*value;
+	// char	*key;
+	// char	*value;
 	t_node	*tmp;
 	int		out;
 
 	out = 1;
-	handle_output(cmd, &out);
+	//printf("here noch\n");
+	check_output_with_pipe(cmd, &out);
 	tmp = g_minishell.envp_list;
 	while (tmp)
 	{
-		key = tmp->key;
-		value = tmp->value;
-		if (key && value)
-			p_fd(out, "declare -x %s=\"%s\"\n", key, value);
+		// key = tmp->key;
+		// value = tmp->value;
+		if (tmp->key && tmp->value)
+			//p_fd(out, "declare -x %s=\"%s\"\n", key, value);
+			p_fd(out, "%s=\"%s\"\n", tmp->key, tmp->value);
 		else
-			p_fd(out, "declare -x %s\n", key);
+			//p_fd(out, "declare -x %s\n", key);
+			p_fd(out, "%s\n", tmp->key);
 		tmp = tmp->next;
 	}
 }
 
-static void	exec_export(char *new_var)
+static void	add_key_to_envp(char *new_var)
 {
 	char	**key_and_value;
 	char	*key;
 	char	*value;
 	t_node	*new_node;
 
-	if (!ft_strchr(new_var, '=') && key_exists(g_minishell.envp_list, new_var))
+	if (!ft_strchr(new_var, '=') && key_ist_da(g_minishell.envp_list, new_var))
+	{
+		//printf("key existiert schon\n");
 		return ;
-	if (!ft_strchr(new_var, '=') && !key_exists(g_minishell.envp_list, new_var))
+	}
+	if (!ft_strchr(new_var, '=') && !key_ist_da(g_minishell.envp_list, new_var))
 	{
 		new_node = ft_lstnew(new_var, NULL, NULL);
 		ft_lstadd_back(&g_minishell.envp_list, new_node);
@@ -69,7 +75,7 @@ static void	exec_export(char *new_var)
 	key_and_value = split_envp(new_var);
 	key = key_and_value[0];
 	value = key_and_value[1];
-	if (!key_exists(g_minishell.envp_list, key))
+	if (!key_ist_da(g_minishell.envp_list, key))
 	{
 		new_node = ft_lstnew(key, value, new_var);
 		ft_lstadd_back(&g_minishell.envp_list, new_node);
@@ -89,22 +95,22 @@ int	ft_export(t_command cmd)
 	status = 0;
 	if (cmd.number_of_args == 1)
 	{
-		print_export(cmd);
+		valid_export_print(cmd);
 		return (status);
 	}
 	while (cmd.args[i])
 	{
-		if (!is_valid_identifier(cmd.args[i]))
+		if (!check_valid_export(cmd.args[i]))
 		{
 			p_fd(STDERR_FILENO, \
 				"bash: export: `%s': not a valid identifier\n", cmd.args[i]);
 			status = 1;
 		}
 		else
-			exec_export(cmd.args[i]);
+			add_key_to_envp(cmd.args[i]);
 		i++;
 	}
 	if (g_minishell.on_fork)
-		die_child(0, status);
+		end_pro_child(0, status);
 	return (status);
 }

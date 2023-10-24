@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_exe.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 14:16:57 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/20 15:15:10 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int	run_n_cmds(t_command *prev, t_command *curr, t_command *next)
 	{
 		signal(SIGQUIT, SIG_DFL);
 		if (curr->input_fd == -1 || curr->output_fd == -1)
-			die_child(0, 1);
+			end_pro_child(0, 1);
 		builtin_pos = get_builtin_pos(curr->args[0]);
 		if (builtin_pos != -1)
 			run_builtin(*curr, g_minishell.builtins[builtin_pos]);
@@ -58,7 +58,7 @@ static int	run_n_cmds(t_command *prev, t_command *curr, t_command *next)
 			close_fds_in_child();
 			execve(curr->bin_path, curr->args, g_minishell.envp);
 		}
-		die_child(0, curr->error);
+		end_pro_child(0, curr->error);
 	}
 	return (pid);
 }

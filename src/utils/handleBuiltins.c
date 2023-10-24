@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handleBuiltins.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 15:23:59 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/20 14:47:53 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,15 @@ int	get_builtin_pos(char *str)
 	return (-1);
 }
 
-void	handle_input(t_command cmd, int *fd)
-{
-	if (cmd.input_fd != STDIN_FILENO)
-		*fd = cmd.input_fd;
-	else if (cmd.pipe[0] != 0)
-		*fd = cmd.pipe[0];
-}
+// void	check_input_with_pipe(t_command cmd, int *fd)
+// {
+// 	if (cmd.input_fd != STDIN_FILENO)
+// 		*fd = cmd.input_fd;
+// 	else if (cmd.pipe[0] != 0)
+// 		*fd = cmd.pipe[0];
+// }
 
-void	handle_output(t_command cmd, int *fd)
+void	check_output_with_pipe(t_command cmd, int *fd)
 {
 	if (cmd.output_fd != STDOUT_FILENO)
 		*fd = cmd.output_fd;

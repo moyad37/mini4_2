@@ -6,7 +6,7 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/17 22:17:19 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/20 20:42:38 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@
 
 // 	envp = &g_minishell.envp_list;
 // 	pwd = getcwd(NULL, 0);
-// 	if (key_exists(*envp, "OLDPWD"))
+// 	if (key_ist_da(*envp, "OLDPWD"))
 // 		change_value_from_key(envp, "OLDPWD", pwd);
 // 	ft_free(pwd);
 // 	chdir(new_dir);
 // 	pwd = getcwd(NULL, 0);
-// 	if (key_exists(*envp, "PWD"))
+// 	if (key_ist_da(*envp, "PWD"))
 // 		change_value_from_key(envp, "PWD", pwd);
 // 	ft_free(pwd);
 // }
@@ -92,7 +92,7 @@
 // 	}
 // 	update_env();
 // 	if (g_minishell.on_fork)
-// 		die_child(0, status);
+// 		end_pro_child(0, status);
 // 	return (status);
 // }
 
@@ -114,7 +114,7 @@ void	update_pwd_env(void)
 
 	pwd = getcwd(NULL, 0);
 	envp = &g_minishell.envp_list;
-	if (key_exists(*envp, "OLDPWD"))
+	if (key_ist_da(*envp, "OLDPWD"))
 		change_value_from_key(envp, "OLDPWD", pwd);
 	free(pwd);
 }
@@ -133,39 +133,26 @@ int	change_directory(char *new_dir)
 
 int	ft_cd(t_command cmd)
 {
+	char *home;
+	
 	if (cmd.number_of_args == 1)
 	{
-		char *home = get_key_value(g_minishell.envp_list, "HOME");
+		home = get_key_value(g_minishell.envp_list, "HOME");
 		if (strlen(home) > 0)
-		{
 			return (change_directory(home));
-		}
 		else
-		{
-			p_fd(STDERR_FILENO, "bash: cd: HOME not set\n");
-			return (1);
-		}
+			return (p_fd(STDERR_FILENO, "bash: cd: HOME not set\n"), 1);
 	}
 	else if (cmd.number_of_args > 2)
-	{
-		p_fd(STDERR_FILENO, "bash: cd: too many arguments\n");
-		return (1);
-	}
+		return (p_fd(STDERR_FILENO, "bash: cd: too many arguments\n"), 1);
 	else
 	{
 		int filetype = is_regular_file(cmd.args[1]);
 		if (filetype == REG_FILE)
-		{
-			p_fd(STDERR_FILENO, "bash: cd: %s: Not a directory\n", cmd.args[1]);
-			return (1);
-		}
+			return (p_fd(STDERR_FILENO, "bash: cd: %s: Not a directory\n", cmd.args[1]), 1);
 		else if (filetype == NO_SUCH_FILE)
-		{
 			return (1);
-		}
 		else
-		{
 			return (change_directory(cmd.args[1]));
-		}
 	}
 }
