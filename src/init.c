@@ -6,7 +6,7 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/20 14:37:40 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/28 19:45:22 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	init(char **envp)
 	i = 0;
 	g_minishell.status_code = 0;
 	i++;
-	g_minishell.on_fork = 0;
+	g_minishell.in_child_process = 0;
 	i++;
 	g_minishell.envp_list = ev_list_get(envp);
 	i++;

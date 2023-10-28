@@ -6,7 +6,7 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/24 14:06:22 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/25 15:36:01 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,13 @@ char	**check_commands(char *cmd)
 	else
 	{
 		add_history(cmd);
-		tokens = lexer(cmd);
+		tokens = lexer(cmd, -1);
 		if(*tokens == NULL)
 			return (NULL);
 		ft_free(cmd);
-		if (parser(&tokens) == 1 || *tokens == NULL)
+		if (parser(&tokens, 0) == 1 || *tokens == NULL)
 		{
+			//printf("parser_error\n");
 			ft_free_matrix((void **)tokens);
 			return (NULL);
 		}

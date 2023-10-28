@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   red_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 13:57:46 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/28 19:43:52 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,13 @@
 #include "../../../includes/minishell.h"
 
 
-
-static void	set_output_fd(t_command *cmd, char *redirect, char *filename)
+/*
+Diese Funktion wird verwendet, um die Ausgabedatei (Standardausgabe) eines Befehls auf eine bestimmte
+Datei umzuleiten. Sie überprüft den redirect-Parameter, um zu bestimmen, ob es sich um eine Neuerstellung
+(">") oder eine Anhängung (">>") handelt, und öffnet die Datei entsprechend. Dann wird der Ausgabestrom des
+Befehls auf diese Datei umgeleitet.
+*/
+static void	setze_ausgabe(t_command *cmd, char *redirect, char *filename)
 {
 	int	flags;
 
@@ -30,8 +35,12 @@ static void	set_output_fd(t_command *cmd, char *redirect, char *filename)
 		swap_stream_fd("output", cmd, open(filename, flags, 0644));
 	}
 }
-
-static void	set_input_fd(t_command *cmd, char *redirect, char *filename)
+/*
+Diese Funktion wird verwendet, um die Eingabedatei (Standard-Eingabe) eines Befehls auf eine
+bestimmte Datei umzuleiten. Sie überprüft den redirect-Parameter, um zu bestimmen, ob es sich
+um eine Eingabeumleitung ("<") oder Heredoc (eine Methode zur Eingabe von Daten in eine Datei) handelt.
+*/
+static void	setze_eingabe(t_command *cmd, char *redirect, char *filename)
 {
 	char	*delim;
 
@@ -44,20 +53,20 @@ static void	set_input_fd(t_command *cmd, char *redirect, char *filename)
 	}
 }
 
-static void	fill_fds(t_command *cmd)
+static void	configure_streams(t_command *cmd)
 {
 	int	i;
 
 	i = 0;
-	cmd->input_fd = 0;
-	cmd->output_fd = 1;
+	cmd->eingabe = 0;
+	cmd->ausgabe = 1;
 	while (cmd->args[i])
 	{
-		if (is_input_redirect(cmd->args[i]))
-			set_input_fd(cmd, cmd->args[i], cmd->args[i + 1]);
-		else if (is_output_redirect(cmd->args[i]))
-			set_output_fd(cmd, cmd->args[i], cmd->args[i + 1]);
-		if (has_error(cmd))
+		if (check_red_input(cmd->args[i]))
+			setze_eingabe(cmd, cmd->args[i], cmd->args[i + 1]);
+		else if (check_red_output(cmd->args[i]))
+			setze_ausgabe(cmd, cmd->args[i], cmd->args[i + 1]);
+		if (check_command_errors(cmd))
 		{
 			handle_error(cmd, cmd->args[i + 1]);
 			return ;
@@ -74,10 +83,23 @@ void	init_redirects(void)
 	int	args;
 
 	i = 0;
-	args = g_minishell.number_of_cmds;
+	args = g_minishell.command_anzahl;
 	while (i < args && !g_minishell.heredoc.heredoc_exited)
 	{
-		fill_fds(&g_minishell.commands[i]);
+		configure_streams(&g_minishell.commands[i]);
 		i++;
 	}
+}
+
+int	get_redirect(int i)
+{
+	init_redirects();
+	i++;
+	losche_umleitung();
+	i++;
+	losche_zitat();
+	i++;
+	if(i != 3)
+		return (0);
+	return (i);
 }

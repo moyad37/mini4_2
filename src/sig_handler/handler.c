@@ -6,7 +6,7 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/20 14:33:57 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/28 19:46:01 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@ in einer Shell zu erleichtern. In einem Kindprozess wird nur eine neue Zeile hin
 */
 void	handl_sig(int signal)
 {
-	if (signal == SIGINT && !g_minishell.on_fork)
+	if (signal == SIGINT && !g_minishell.in_child_process)
 	{
 		write(STDOUT_FILENO, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
-	else if (signal == SIGINT && g_minishell.on_fork == 1)
+	else if (signal == SIGINT && g_minishell.in_child_process == 1)
 		write(STDOUT_FILENO, "\n", 1);
 }
 

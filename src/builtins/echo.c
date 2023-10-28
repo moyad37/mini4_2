@@ -6,7 +6,7 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/20 15:25:05 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/28 20:19:51 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,20 @@ static void	print_after_check(int size, char **args, int out_fd)
 		ft_putstr_fd(args[i], out_fd);
 }
 
-// void printCommand(t_command cmd)
-// {
-//     printf("pipe: [%d, %d]\n", cmd.pipe[0], cmd.pipe[1]);
-//     printf("number_of_args: %d\n", cmd.number_of_args);
-//     printf("input_fd: %d\n", cmd.input_fd);
-//     printf("output_fd: %d\n", cmd.output_fd);
-//     printf("error: %d\n", cmd.error);
-//     printf("bin_path: %s\n", cmd.bin_path);
-//     printf("args:\n");
-//     for (int i = 0; i < cmd.number_of_args; i++)
-// 	{
-//         printf("  args[%d]: %s\n", i, cmd.args[i]);
-//     }
-// }
+void printCommand(t_command cmd)
+{
+    printf("pipe: [%d, %d]\n", cmd.pipe[0], cmd.pipe[1]);
+    printf("arg_counter: %d\n", cmd.arg_counter);
+    printf("input_fd: %d\n", cmd.eingabe);
+    printf("output_fd: %d\n", cmd.ausgabe);
+    printf("error: %d\n", cmd.error);
+    printf("executable_path: %s\n", cmd.executable_path);
+    printf("args:\n");
+    for (int i = 0; i < cmd.arg_counter; i++)
+	{
+        printf("  args[%d]: %s\n", i, cmd.args[i]);
+    }
+}
 
 
 /*
@@ -75,20 +75,20 @@ int	ft_echo(t_command cmd)
 	//printCommand(cmd);
 	check_output_with_pipe(cmd, &out);
 	comparison = 1;
-	if (g_minishell.on_fork && (cmd.input_fd == -1 || cmd.output_fd == -1))
+	if (g_minishell.in_child_process && (cmd.eingabe == -1 || cmd.ausgabe == -1))
 		end_pro_child(0, 1);
-	if (!g_minishell.on_fork && (cmd.input_fd == -1 || cmd.output_fd == -1))
+	if (!g_minishell.in_child_process && (cmd.eingabe == -1 || cmd.ausgabe == -1))
 		return (1);
-	if (cmd.number_of_args < 2)
+	if (cmd.arg_counter < 2)
 		ft_putstr_fd("\n", out);
 	else
 	{
 		comparison = if_n(cmd.args[1]);
-		print_after_check(cmd.number_of_args, cmd.args, out);
+		print_after_check(cmd.arg_counter, cmd.args, out);
 		if (comparison == 0)
 			ft_putstr_fd("\n", out);
 	}
-	if (g_minishell.on_fork)
+	if (g_minishell.in_child_process)
 		end_pro_child(0, 0);
 	return (0);
 }

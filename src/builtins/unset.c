@@ -6,7 +6,7 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/20 21:05:13 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/28 19:45:54 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	ft_unset(t_command cmd)
 
 	i = 1;
 	status = 0;
-	if (cmd.number_of_args > 1)
+	if (cmd.arg_counter > 1)
 	{
 		while (cmd.args[i])
 		{
@@ -84,7 +84,7 @@ int	ft_unset(t_command cmd)
 			i++;
 		}
 	}
-	if (g_minishell.on_fork)
+	if (g_minishell.in_child_process)
 		end_pro_child(0, status);
 	return (status);
 }

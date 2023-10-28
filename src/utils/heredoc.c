@@ -6,7 +6,7 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/20 15:14:53 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/28 19:46:05 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static char	*validate_line(void)
 	if (!line)
 		return (NULL);
 	append(&line, ft_strdup("\n"));
-	expand_vars(&line);
+	replace_variables(&line, 0);
 	return (line);
 }
 
@@ -80,13 +80,13 @@ int	heredoc(t_command *cmd, char *arg)
 	int		pid;
 	int		status;
 
-	g_minishell.on_fork = 2;
+	g_minishell.in_child_process = 2;
 	g_minishell.heredoc.fd = open(TMPFILE, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	pid = fork();
 	if (pid == 0)
 		get_heredoc_fd(g_minishell.heredoc.fd, arg);
 	waitpid(pid, &status, 0);
-	g_minishell.on_fork = 0;
+	g_minishell.in_child_process = 0;
 	close(g_minishell.heredoc.fd);
 	if (status != 0)
 		return (1);

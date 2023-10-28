@@ -6,13 +6,13 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/24 13:35:10 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/28 19:42:47 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-static int	syntax_error_on_redirect(char *next_token)
+static int	check_redirect_syntax_error (char *next_token)
 {
 	if (next_token == NULL || is_redirect(next_token) \
 			|| ft_strcmp(next_token, "|") == 0)
@@ -23,7 +23,7 @@ static int	syntax_error_on_redirect(char *next_token)
 	return (0);
 }
 
-static int	syntax_error_on_pipe(char **tokens, int pos)
+static int	check_pipe_syntax_error(char **tokens, int pos)
 {
 	if (pos == 0)
 		return (-2);
@@ -35,16 +35,16 @@ static int	syntax_error_on_pipe(char **tokens, int pos)
 	return (0);
 }
 
-int	has_error(t_command *cmd)
+int	check_command_errors(t_command *cmd)
 {
 	if (g_minishell.heredoc.heredoc_exited != 0 \
-		|| cmd->input_fd == -1 || cmd->output_fd == -1)
+		|| cmd->eingabe == -1 || cmd->ausgabe == -1)
 		return (1);
 	return (0);
 }
 
 
-static int	has_unclosed_quote(char *token)
+static int	check_hat_geoffnete_zitat(char *token)
 {
 	int		i;
 	char	quote;
@@ -62,26 +62,33 @@ static int	has_unclosed_quote(char *token)
 	return (quote);
 }
 
-
-int	get_syntax_error_idx(char **tokens)
+/*
+Die Funktion check_syntax_errors durchläuft die Tokens und überprüft
+auf verschiedene Syntaxfehler. Wenn das Token dem Zeichen "|" entspricht
+und ein Syntaxfehler auftritt, wird der Rückgabewert von check_pipe_syntax_error überprüft.
+Wenn der Wert -2 ist, wird -1 zurückgegeben, um anzuzeigen, dass ein Syntaxfehler am
+Anfang der Tokens aufgetreten ist. Andernfalls wird der aktuelle Index i zurückgegeben.
+Wenn das Token eine Umleitung ist und ein Syntaxfehler auftritt, wird der aktuelle Index i zurückgegeben.
+Wenn das Token ein nicht geschlossenes Anführungszeichen hat, wird der aktuelle Index i zurückgegeben.
+Wenn kein Syntaxfehler gefunden wird, wird -2 zurückgegeben.
+*/
+int	check_syntax_errors(char **tokens, int i)
 {
-	int	i;
 	int	before_pipe;
 
-	i = 0;
 	while (tokens[i] != NULL)
 	{
-		if (*tokens[i] == '|' && syntax_error_on_pipe(tokens, i))
+		if (*tokens[i] == '|' && check_pipe_syntax_error(tokens, i))
 		{
-			before_pipe = syntax_error_on_pipe(tokens, i);
+			before_pipe = check_pipe_syntax_error(tokens, i);
 			if (before_pipe == -2)
 				return (-1);
 			return (i);
 		}
 		else if (is_redirect(tokens[i])
-			&& syntax_error_on_redirect(tokens[i + 1]))
+			&& check_redirect_syntax_error (tokens[i + 1]))
 			return (i);
-		else if (has_unclosed_quote(tokens[i]))
+		else if (check_hat_geoffnete_zitat(tokens[i]))
 			return (i);
 		i++;
 	}

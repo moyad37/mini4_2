@@ -6,7 +6,7 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/20 15:40:37 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/28 19:42:25 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int	mehr_als_valid(char *nptr)
 	return (0);
 }
 
-static int	else_exit_code_num(t_command cmd)
+static int	else_status_code_num(t_command cmd)
 {
 	if (mehr_als_valid(cmd.args[1]))
 	{
@@ -49,25 +49,25 @@ static int	else_exit_code_num(t_command cmd)
 
 int	ft_exit(t_command cmd)
 {
-	long int	exit_code;
+	long int	status_code;
 
-	exit_code = 0;
+	status_code = 0;
 	if (cmd.args[1] == NULL)
-		end_pro_child(0, exit_code);
+		end_pro_child(0, status_code);
 	if (check_nur_num(cmd.args[1]))
 	{
 		p_fd(STDERR_FILENO, \
 			"bash: exit: %s: numeric argument required\n", cmd.args[1]);
-		exit_code = 2;
+		status_code = 2;
 	}
-	else if (cmd.number_of_args > 2)
+	else if (cmd.arg_counter > 2)
 	{
 		p_fd(STDERR_FILENO, "bash: exit: too many arguments\n");
-		exit_code = 1;
+		status_code = 1;
 	}
 	else
-		exit_code = else_exit_code_num(cmd);
+		status_code = else_status_code_num(cmd);
 	ft_putstr_fd("exit\n", STDIN_FILENO);
-	end_pro_child(0, exit_code);
+	end_pro_child(0, status_code);
 	return (0);
 }

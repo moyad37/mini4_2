@@ -3,18 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   red_delete.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmanssou  <mmanssou@student.42.fr   >      +#+  +:+       +#+        */
+/*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/09/13 14:08:11 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/28 19:43:51 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../../../includes/minishell.h"
 
-
-static int	exclude_redirects(char **tokens)
+static int	zähle_nicht_umleitungs_tokens(char **tokens)
 {
 	int	i;
 	int	mem_to_alloc;
@@ -32,7 +30,7 @@ static int	exclude_redirects(char **tokens)
 	return (mem_to_alloc);
 }
 
-static void	copy_tokens(char **new, char **copy)
+static void	copy_red(char **new, char **copy)
 {
 	int	i;
 	int	j;
@@ -48,29 +46,33 @@ static void	copy_tokens(char **new, char **copy)
 		i++;
 	}
 }
-
-static void	remove_redirect(char ***command_args)
+/*
+Diese Funktion entfernt Umleitungs-Tokens aus der Argumentenliste eines Befehls.
+Sie berechnet die Anzahl der zu behaltenden Tokens, erstellt ein neues Array ohne Umleitungen,
+gibt das alte Array frei und weist das neue Array den Argumenten des Befehls zu.
+*/
+static void	losche_red(char ***command_args)
 {
 	int		tokens_amount;
 	char	**new_tokens;
 
-	tokens_amount = exclude_redirects(*command_args);
+	tokens_amount = zähle_nicht_umleitungs_tokens(*command_args);
 	new_tokens = ft_calloc(sizeof(char *), tokens_amount + 1);
-	copy_tokens(new_tokens, *command_args);
+	copy_red(new_tokens, *command_args);
 	ft_free_matrix((void **)*command_args);
 	*command_args = new_tokens;
 }
 
-void	remove_redirects(void)
+void	losche_umleitung(void)
 {
 	int	i;
 	int	args;
 
 	i = 0;
-	args = g_minishell.number_of_cmds;
+	args = g_minishell.command_anzahl;
 	while (i < args)
 	{
-		remove_redirect(&g_minishell.commands[i].args);
+		losche_red(&g_minishell.commands[i].args);
 		i++;
 	}
 }

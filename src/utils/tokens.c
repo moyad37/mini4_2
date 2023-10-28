@@ -6,14 +6,14 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/24 13:35:05 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/25 12:13:00 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../../includes/minishell.h"
 
-char	**get_subtokens(char *token, int idx)
+char	**split_string_in_tokens(char *token, int idx)
 {
 	int		i;
 	char	**subtokens;
@@ -29,41 +29,47 @@ char	**get_subtokens(char *token, int idx)
 		i++;
 	if (quoted && check_zitat(token[i]))
 		i++;
-	subtokens = get_subtokens(token + i, idx + 1);
+	subtokens = split_string_in_tokens(token + i, idx + 1);
 	subtokens[idx] = ft_substr(token, 0, i);
 	return (subtokens);
 }
-
-char	*concat_subtokens(char **subtokens)
+/*
+Diese Funktion fügt die Subtokens wieder zu einem einzigen String zusammen.
+*/
+char	*join_subtokens(char **subtokens, int x)
 {
-	int		i;
 	char	*expanded_token;
-
-	i = 0;
+	
 	expanded_token = ft_strdup("");
-	while (subtokens[i])
+	while (subtokens[x])
 	{
-		append(&expanded_token, subtokens[i]);
-		i++;
+		append(&expanded_token, subtokens[x]);
+		x++;
 	}
 	return (expanded_token);
 }
-
-void	expand_token(char **token)
+/*
+Die Funktion token_handler nimmt einen Zeiger auf ein Token token als Parameter entgegen.
+Sie ruft die Funktion split_string_in_tokens auf, um das Token in Untertoken aufzuteilen.
+Dann durchläuft sie die Untertoken und überprüft, ob das erste Zeichen kein einfaches Anführungszeichen
+ist und ob das Untertoken den Zeichen '$' enthält. Wenn dies der Fall ist, ruft sie die Funktion replace_variables auf,
+um die Variablen in diesem Untertoken zu erweitern. Am Ende wird das ursprüngliche Token freigegeben und das
+erweiterte Token wird an seine Stelle gesetzt. Wenn das erweiterte Token leer ist, wird es auf NULL gesetzt.
+Schließlich wird der Speicher für das Array subtokens freigegeben.
+*/
+void	token_handler(char **token, int i)
 {
-	int		i;
 	char	**subtokens;
 
-	i = 0;
-	subtokens = get_subtokens(*token, 0);
+	subtokens = split_string_in_tokens(*token, 0);
 	while (subtokens[i])
 	{
 		if (subtokens[i][0] != SINGLE_QUOTE && ft_strchr(subtokens[i], '$'))
-			expand_vars(subtokens + i);
+			replace_variables(subtokens + i, (0));
 		i++;
 	}
 	free(*token);
-	*token = concat_subtokens(subtokens);
+	*token = join_subtokens(subtokens, 0);
 	if (!ft_strlen(*token))
 	{
 		free(*token);

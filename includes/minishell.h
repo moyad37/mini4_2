@@ -6,7 +6,7 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/24 13:54:12 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/28 19:45:16 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,18 +48,6 @@
 
 # include "../src/libft/libft.h"
 
-
-typedef struct s_command
-{
-	int		pipe[2];
-	int		number_of_args;
-	int		input_fd;
-	int		output_fd;
-	int		error;
-	char	*bin_path;
-	char	**args;
-}	t_command;
-
 typedef struct s_heredoc
 {
 	int			fd;
@@ -67,12 +55,24 @@ typedef struct s_heredoc
 	char		*line;
 }	t_heredoc;
 
+typedef struct s_command
+{
+	int		pipe[2];
+	int		arg_counter;
+	int		eingabe;
+	int		ausgabe;
+	int		error;
+	char	*executable_path;
+	char	**args;
+}	t_command;
+
+
 typedef struct s_minishell
 {
 	int			status_code;
-	int			number_of_cmds;
+	int			command_anzahl;
 	char		**envp;
-	int			on_fork;
+	int			in_child_process;
 	int			(*builtins[7])(t_command cmd);
 	t_heredoc	heredoc;
 	t_node		*envp_list;
@@ -90,8 +90,8 @@ char	**split_envp(char *env_variable);
 char	**creat_valid_envp(void);
 
 // Builtins
-void	run_builtin(t_command cmd, int (*builtin)(t_command cmd));
-int		get_builtin_pos(char *str);
+void	execute_builtin_command(t_command cmd, int (*builtin)(t_command cmd));
+int		get_befehl(char *str);
 int		ft_pwd(t_command cmd);
 int		ft_echo(t_command cmd);
 int		ft_cd(t_command cmd);
@@ -103,60 +103,60 @@ int		ft_exit(t_command cmd);
 void	check_output_with_pipe(t_command cmd, int *fd);
 
 // Lexer
-char	**lexer(char *cmd);
+char	**lexer(char *cmd, int i);
 int		lesezeichen_in_pos(char *str, int pos);
 int		format_foppelt_pipe_leerzeichen(char *str, int pos);
 char	*format_cmd(char *cmd, int i);
-void	replace_between(char *str, char *set1, char *set2);
+void	ersatz_char(char *str, char *set1, char *set2);
 char	*init_for_cmd(char *cmd);
 
 // Parser
-int		parser(char ***tokens);
-int		get_syntax_error_idx(char **tokens);
-void	expand_token(char **token);
-char	**get_subtokens(char *token, int idx);
-char	*concat_subtokens(char **subtokens);
-void	expand_vars(char **token);
+int		parser(char ***tokens, int i);
+int		check_syntax_errors(char **tokens, int i);
+void	token_handler(char **token, int i);
+char	**split_string_in_tokens(char *token, int idx);
+char	*join_subtokens(char **subtokens, int x);
+void	replace_variables(char **token, int i);
 
 // Executor
-void	executor(char **tokens);
+void	executor(char **tokens, int i, int status);
 void	init_redirects(void);
-void	init_commands(char **tokens, int idx);
-void	remove_redirects(void);
-void	remove_quotes(void);
-void	init_bin_path(void);
-void	update_number_of_args(void);
-int		handle_exec(int idx, t_command *curr);
+void	split_save_cmd_struct(char **tokens, int idx);
+void	losche_umleitung(void);
+void	losche_zitat(void);
+void	get_pfad(int i);
+void	update_args_count(int i);
+int		handel_get_bid_exe(int idx, t_command *curr);
 int		heredoc(t_command *cmd, char *arg);
-void	clear_subtokens(char **subtokens);
+void	hanlde_zitat(char **subtokens);
 
 // Redirect
-int		has_error(t_command *cmd);
+int		check_command_errors(t_command *cmd);
 void	handle_error(t_command *cmd, char *filename);
 
 // Utils
 int		check_zitat(char c);
 int		check_pipe(char c);
 int		is_bash_word(char *str);
-int		is_bash_char(char c);
+int		check_valid_var_character(char c);
 int		is_redirect(char *str);
-int		is_input_redirect(char *redirect);
-int		is_output_redirect(char *redirect);
-int		is_dir(const char *path);
+int		check_red_input(char *redirect);
+int		check_red_output(char *redirect);
+int		check_directory(const char *path);
 void	append(char **s1, char *s2);
-int		is_valid_var(char *str);
+int		check_valid_variable_format(char *str);
 void	swap_stream_fd(char *stream, t_command *command, int new_fd);
 void	close_fds(void);
-void	close_fds_in_child(void);
+void	child_fd_close(void);
 void	handl_sig(int signal);
-void	ft_free_commands(void);
+void	end_alles(void);
 void	ft_free(void *ptr);
-void	end_pro_child(int heredoc, int exit_code);
+void	end_pro_child(int heredoc, int status_code);
 int		test_filename(char *filename, char *redirect);
 void	update_env(void);
 int		count_args(char **tokens);
 void	make_dups(t_command cmd);
-void	print_curr_err(t_command cmd);
+void	print_error(t_command cmd);
 
 void	ft_print_matrix_fd(char **matrix, int fd);
 
@@ -172,8 +172,8 @@ void	ft_destroy(void);
 char	**seperatByC(const char *str, char c);
 
 //utils/zitat/rm_ziztat
-void	remove_filename_quotes(void);
-
+void	handle_files(int i);
+int	get_redirect(int i);
 
 
 

@@ -6,94 +6,100 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/20 15:15:24 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/28 19:45:56 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../../includes/minishell.h"
 
-static void	init_executor(char **tokens)
+static void	setup_execution_context(char **tokens)
 {
-	init_commands(tokens, 0);
+	//alle commands lesen und zählen und dann in die struct t_command speichern
+	split_save_cmd_struct(tokens, 0);
 	ft_free_matrix((void **)tokens);
-	remove_filename_quotes();
-	init_redirects();
-	remove_redirects();
-	remove_quotes();
-	update_number_of_args();
-	init_bin_path();
+	//get in der command und sucht nach file name und setzt es zu null
+	handle_files(0);
+	
+	//ab hier kann ich zu andere funktion rein hüpfen und die letzten zwei kann ich in funktion executor schreiben
+	if(get_redirect(0) != 3)
+		ft_destroy();
+	//init_redirects();
+	// remove_redirects();
+	// losche_zitat();
+	// update_args_count(0);
+	// get_pfad(0);
 }
-
-static int	run_single_cmd(t_command cmd)
+/*
+Diese Funktion führt einen einzelnen Shell-Befehl aus. Sie prüft,
+ob der Befehl ein eingebauter Befehl ist und führt diesen gegebenenfalls aus.
+Falls nicht, erstellt sie einen Kindprozess, in dem der Befehl ausgeführt wird.
+*/
+static int	execute_command(t_command cmd)
 {
 	int	pid;
 
-	if (get_builtin_pos(cmd.args[0]) != -1)
+	if (get_befehl(cmd.args[0]) != -1)
 	{
-		run_builtin(cmd, g_minishell.builtins[get_builtin_pos(cmd.args[0])]);
-		return (-1);
+		//execute_builtin_command(cmd, g_minishell.builtins[get_befehl(cmd.args[0])]);
+		return (execute_builtin_command(cmd, g_minishell.builtins[get_befehl(cmd.args[0])]), -1);
 	}
 	pid = fork();
-	g_minishell.on_fork = 1;
+	g_minishell.in_child_process = 1;
 	if (pid == 0)
 	{
 		signal(SIGQUIT, SIG_DFL);
-		if (cmd.input_fd == -1 || cmd.output_fd == -1)
+		if (cmd.eingabe == -1 || cmd.ausgabe == -1)
 			end_pro_child(0, 1);
-		if (cmd.error && get_builtin_pos(cmd.args[0]) == -1)
+		if (cmd.error && get_befehl(cmd.args[0]) == -1)
 			end_pro_child(0, cmd.error);
-		if (cmd.bin_path && cmd.args[0])
+		if (cmd.executable_path && cmd.args[0])
 		{
-			make_dups(cmd);
-			close_fds_in_child();
-			execve(cmd.bin_path, cmd.args, g_minishell.envp);
+			//make_dups(cmd);
+			dup2(cmd.eingabe, 0);
+			dup2(cmd.ausgabe, 1);
+			child_fd_close();
+			execve(cmd.executable_path, cmd.args, g_minishell.envp);
 		}
 		end_pro_child(0, cmd.error);
 	}
 	return (pid);
 }
 
-static void	loop_wait(int pid, int *status)
+static void	wait_for_child_processes(int pid, int *status)
 {
 	int	i;
 	int	size;
 
-	i = 0;
-	size = g_minishell.number_of_cmds;
+	i = -1;
+	size = g_minishell.command_anzahl;
 	waitpid(pid, status, 0);
-	while (i < size - 1)
-	{
+	while (++i < size - 1)
 		wait(NULL);
-		i++;
-	}
 	if (WIFEXITED(*status))
 		g_minishell.status_code = WEXITSTATUS(*status);
 	else if (WIFSIGNALED(*status))
 		g_minishell.status_code = 128 + WTERMSIG(*status);
 }
 
-void	executor(char **tokens)
+void	executor(char **tokens, int i, int status)
 {
-	int	i;
 	int	pid;
-	int	status;
 
-	i = -1;
-	status = -1;
-	init_executor(tokens);
+	setup_execution_context(tokens);
+	update_args_count(0);
+	get_pfad(0);
 	if (g_minishell.heredoc.heredoc_exited == 1)
 	{
 		g_minishell.status_code = 130;
 		g_minishell.heredoc.heredoc_exited = 0;
 		return ;
 	}
-	if (g_minishell.number_of_cmds > 1)
-		while (++i < g_minishell.number_of_cmds)
-			pid = handle_exec(i, &g_minishell.commands[i]);
+	if (g_minishell.command_anzahl > 1)
+		while (++i < g_minishell.command_anzahl)
+			pid = handel_get_bid_exe(i, &g_minishell.commands[i]);
 	else
-		pid = run_single_cmd(g_minishell.commands[0]);
+		pid = execute_command(g_minishell.commands[0]);
 	if (pid != -1)
-		loop_wait(pid, &status);
-	g_minishell.on_fork = 0;
+		wait_for_child_processes(pid, &status);
+	g_minishell.in_child_process = 0;
 }

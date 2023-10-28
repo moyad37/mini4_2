@@ -16,8 +16,8 @@ SRCS        = 	minishell.c \
 				src/builtins/unset.c \
 				src/envp/creat_envp.c \
 				src/envp/list_of_envp.c \
-				src/lets_start/redirects/red_delete.c \
-				src/lets_start/redirects/red_init.c \
+				src/lets_start/umleiten/red_delete.c \
+				src/lets_start/umleiten/red_init.c \
 				src/lets_start/check_start.c \
 				src/lets_start/exec.c \
 				src/lets_start/exe_init.c \

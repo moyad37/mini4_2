@@ -6,7 +6,7 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/24 14:05:57 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/25 10:52:04 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	fix_tokens(char **tokens, char set[6])
 	i = 0;
 	while (tokens[i] != NULL)
 	{
-		replace_between(tokens[i], set, SET1);
+		ersatz_char(tokens[i], set, SET1);
 		i++;
 	}
 }
@@ -40,24 +40,31 @@ ihn in einzelne Tokens auf. Dabei werden bestimmte Zeichenfolgen
 im String durch vordefinierte Werte ersetzt. Das Ergebnis ist ein 
 Array von Strings, das die einzelnen Tokens repräsentiert.
 */
-char	**lexer(char *cmd)
+char	**lexer(char *cmd, int i)
 {
 	char	*str;
 	char	**tokens;
 	char	set[6];
 
 	//init_set(set);
-	set[0] = 1;
-	set[1] = 2;
-	set[2] = 3;
-	set[3] = 4;
-	set[4] = 5;
-	set[5] = 6;
+	 while(++i < 6)
+	 	set[i] = i + 1;
+	// set[0] = 1;
+	// set[1] = 2;
+	// set[2] = 3;
+	// set[3] = 4;
+	// set[4] = 5;
+	// set[5] = 6;
 	str = format_cmd(cmd, 0);
 	if(str == NULL)
 		return (NULL);
-	replace_between(str, SET1, set);
+	ersatz_char(str, SET1, set);
 	tokens = ft_split(str);
+	if(!tokens)
+	{
+		free(str);
+		return(NULL);
+	}
 	fix_tokens(tokens, set);
 	free(str);
 	

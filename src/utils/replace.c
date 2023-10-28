@@ -6,7 +6,7 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/24 13:59:25 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/25 10:51:56 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ int	get_pos(char c, char *set)
 	return (i);
 }
 /*
-Die Funktion replace_between ersetzt in einem Zeichenarray str alle
+Die Funktion ersatz_char ersetzt in einem Zeichenarray str alle
 Zeichen, die in set1 vorkommen, durch die entsprechenden Zeichen aus set2. 
 */
-void	replace_between(char *str, char *set1, char *set2)
+void	ersatz_char(char *str, char *set1, char *set2)
 {
 	int		i;
 	int		corresponding_position;

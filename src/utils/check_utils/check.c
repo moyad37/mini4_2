@@ -6,13 +6,13 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/24 13:51:25 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/27 20:03:41 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-int	is_bash_char(char c)
+int	check_valid_var_character(char c)
 {
 	if (!ft_isalpha(c) && !ft_isdigit(c) && c != '_')
 		return (0);
@@ -26,7 +26,7 @@ int	check_pipe(char c)
 	return (0);
 }
 
-int	is_dir(const char *path)
+int	check_directory(const char *path)
 {
 	struct stat	file_stat;
 
@@ -44,7 +44,7 @@ int	check_zitat(char c)
 	return (0);
 }
 
-int	is_valid_var(char *str)
+int	check_valid_variable_format(char *str)
 {
 	if (str[0] == '$' && (ft_isalpha(str[1]) || str[1] == '_' || str[1] == '?'))
 		return (1);

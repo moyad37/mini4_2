@@ -6,7 +6,7 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/20 20:42:38 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/28 20:42:42 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,9 @@
 // 	int	filetype;
 
 // 	status = 1;
-// 	if (cmd.number_of_args == 1)
+// 	if (cmd.arg_counter == 1)
 // 		status = change_home();
-// 	else if (cmd.number_of_args > 2)
+// 	else if (cmd.arg_counter > 2)
 // 		p_fd(STDERR_FILENO, "bash: cd: too many arguments\n");
 // 	else
 // 	{
@@ -91,7 +91,7 @@
 // 		}
 // 	}
 // 	update_env();
-// 	if (g_minishell.on_fork)
+// 	if (g_minishell.in_child_process)
 // 		end_pro_child(0, status);
 // 	return (status);
 // }
@@ -134,8 +134,8 @@ int	change_directory(char *new_dir)
 int	ft_cd(t_command cmd)
 {
 	char *home;
-	
-	if (cmd.number_of_args == 1)
+	//printCommand(cmd);
+	if (cmd.arg_counter == 1)
 	{
 		home = get_key_value(g_minishell.envp_list, "HOME");
 		if (strlen(home) > 0)
@@ -143,7 +143,9 @@ int	ft_cd(t_command cmd)
 		else
 			return (p_fd(STDERR_FILENO, "bash: cd: HOME not set\n"), 1);
 	}
-	else if (cmd.number_of_args > 2)
+	else if (cmd.arg_counter == 2 && access(cmd.args[1], F_OK) == -1)
+		return (p_fd(STDERR_FILENO, "bash: cd: %s: No such file or directory\n", cmd.args[1]), 1);
+	else if (cmd.arg_counter > 2)
 		return (p_fd(STDERR_FILENO, "bash: cd: too many arguments\n"), 1);
 	else
 	{

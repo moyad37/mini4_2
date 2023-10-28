@@ -6,7 +6,7 @@
 /*   By: mmanssou <mmanssou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by mmanssou          #+#    #+#             */
-/*   Updated: 2023/10/02 15:16:11 by mmanssou         ###   ########.fr       */
+/*   Updated: 2023/10/28 18:52:09 by mmanssou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ static void	err_on_output_redirect(char *filename)
 
 void	handle_error(t_command *cmd, char *filename)
 {
-	if (cmd->input_fd == -1)
+	if (cmd->eingabe == -1)
 		err_on_input_redirect(filename);
-	else if (cmd->output_fd == -1)
+	else if (cmd->ausgabe == -1)
 		err_on_output_redirect(filename);
 }
 
